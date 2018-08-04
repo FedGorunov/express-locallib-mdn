@@ -4,7 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
-const mongoDB ='';
+
+// Get arguments passed on command line
+var userArgs = process.argv.slice(2);
+if (!userArgs[0].startsWith('mongodb://')) {
+    console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
+    return
+}
+const mongoDB =userArgs[0];
+
 mongoose.connect(mongoDB);
 mongoose.Promise=global.Promise;
 const db = mongoose.connection;
@@ -12,6 +20,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const catalogRouter = require('./routes/catalog');
 
 var app = express();
 
@@ -27,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/catalog', catalogRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
