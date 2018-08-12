@@ -43,7 +43,7 @@ exports.genre_detail = function(req, res, next) {
 // Display Genre create form on GET.
 exports.genre_create_get = function(req, res, next) {
   
-    res.send('NOT IMPLEMENTED: Genre delete GET');
+    res.render('genre_form', { title: 'Create Genre' });
 };
 
 // Handle Genre create on POST.
@@ -72,7 +72,34 @@ exports.genre_delete_get = function(req, res, next) {
 };
 
 // Handle Genre delete on POST.
-exports.genre_delete_post = // Handle Genre create on POST.
+exports.genre_delete_post = function(req, res, next){
+    async.parallel({
+        genre: function(callback){
+            Genre.findById(req.body.id).exec(callback)
+        },
+        genre_books: function(callback){
+            Book.find({'genre': req.body.id}).exec(callback);
+        }
+        },function(err, results){
+                if (err) { return next(err); }
+                //genre has some books, render
+                if (results.genre_books.length >0){
+                    res.render('genre_delete', {title: 'Delete Genre', genre : results.genre, genre_books: results.genre_books }); 
+                    return;
+                }
+                else{
+                    // genre has no books,so delete
+                    Genre.findByIdAndRemove(req.body.id, function(err){
+                        if (err) { return next(err); }
+                        res.redirect('/catalog/genres')
+                    })
+                }
+
+        }
+    );
+};
+
+// Handle Genre create on POST.
 exports.genre_create_post =  [
    
     // Validate that the name field is not empty.

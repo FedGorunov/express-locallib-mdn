@@ -101,7 +101,7 @@ exports.author_delete_get = function(req, res, next) {
         },
         authors_books: function(callback) {
           Book.find({ 'author': req.params.id }).exec(callback)
-        },
+        }
     }, function(err, results) {
         if (err) { return next(err); }
         if (results.author==null) { // No results.
