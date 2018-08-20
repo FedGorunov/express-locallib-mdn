@@ -8,12 +8,14 @@ const compression = require('compression');
 const helmet = require('helmet');
 
 // Get arguments passed on command line
-var userArgs = process.argv.slice(2);
-if (!userArgs[0].startsWith('mongodb://')) {
-    console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
-    return
-}
-const mongoDB =process.env.MONGODB_URI ||userArgs[0];
+// var userArgs = process.argv.slice(2);
+// if (!userArgs[0].startsWith('mongodb://')) {
+//     console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
+//     return
+// }
+//const mongoDB =process.env.MONGODB_URI ||userArgs[0];
+
+const mongoDB =process.env.MONGODB_URI||'mongodb://feddo:5fffff@ds111012.mlab.com:11012/locallibrary_fgor';
 
 mongoose.connect(mongoDB);
 mongoose.Promise=global.Promise;
