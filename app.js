@@ -15,7 +15,9 @@ const helmet = require('helmet');
 // }
 //const mongoDB =process.env.MONGODB_URI ||userArgs[0];
 
-const mongoDB =process.env.MONGODB_URI||'mongodb://feddo:5fffff@ds111012.mlab.com:11012/locallibrary_fgor';
+
+var dev_db_url = 'mongodb://feddo:5fffff@ds111012.mlab.com:11012/locallibrary_fgor'
+var mongoDB = process.env.MONGODB_URI || dev_db_url;
 
 mongoose.connect(mongoDB);
 mongoose.Promise=global.Promise;
